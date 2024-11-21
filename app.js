@@ -29,7 +29,7 @@ app.get('/', (req, res) => {
 });
 
 
-app.use('/api', userRouter);
-app.use('/api', taskRouter);
-app.use('/api',statusRouter);
+app.use('/api/v1', taskRouter);
+app.use('/api/v1',statusRouter);
+app.use('/api/v1', userRouter);
 export default app;
