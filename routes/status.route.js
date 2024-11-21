@@ -39,3 +39,5 @@ router.put('/failedtask/:taskId', async (req, res) => {
     }
     res.status(200).json({ message: "Task updated to failed", task });
 })
+
+export default router;
