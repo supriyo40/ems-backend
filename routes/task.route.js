@@ -28,14 +28,14 @@ router.post('/createtask', async (req, res) => {
 });
 
 router.get('/alltasks', async (req, res) => {
-    const tasks = await Task.find();
+    const tasks = await Task.find().select("assignedTo status");
 
     const userTaskData = {};
 
     for(const task of tasks ){
-        const  userId = task.assignedTo;
+        const userId = task.assignedTo;
         if(!userTaskData[userId]){
-            const user = await User.findById(userId);
+            const user = await User.findById(userId).select("username");
             if(user){
                 userTaskData[userId] = {
                     username: user.username,
@@ -80,7 +80,7 @@ router.get('/taskcount/:userId', async (req, res) => {
         const data = {
             newTask: 0, activeTask: 0, failedTask: 0, completedTask: 0
         };
-        const tasks = await Task.find({assignedTo: userId});
+        const tasks = await Task.find({assignedTo: userId}).select("status");
         tasks.forEach((task) => {
             if (task.status === 'new') data.newTask += 1;
             if (task.status === 'active') data.activeTask += 1;
