@@ -33,7 +33,7 @@ router.post("/register", async (req, res) => {
 router.get('/userdetails/:userId', async(req, res) => {
     try {
         const {userId} = req.params;
-        const user = await User.findById(userId).select("firstName");
+        const user = await User.findById(userId).select("firstName role");
         if (!user) {
             return res.status(404).json({ error: "User not found" });
         }
