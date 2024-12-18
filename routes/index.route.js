@@ -7,6 +7,11 @@ const router = express.Router();
 
 const SECRET_KEY = process.env.SECRET_KEY;
 
+router.get("/allemployee", async (req, res) => {
+    const users = await User.find({ role: "employee" }).select("username");
+    res.status(200).json({ users });
+})
+
 router.post("/register", async (req, res) => {
     const { username, firstName, email, password, role } = req.body;
     
@@ -25,11 +30,18 @@ router.post("/register", async (req, res) => {
     }
 });
 
-router.get('/userdetails/:userId', async(req, res)=>{
-    const {userId} = req.params;
-    const user = await User.findById(userId);
-    res.status(200).json({user});
-})
+router.get('/userdetails/:userId', async(req, res) => {
+    try {
+        const {userId} = req.params;
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: "User not found" });
+        }
+        res.status(200).json({user});
+    } catch (error) {
+        res.status(500).json({ error: "Server error" });
+    }
+});
 
 
 // Login Route

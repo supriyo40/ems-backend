@@ -65,26 +65,32 @@ router.get('/alltasks', async (req, res) => {
 
 // Route to get tasks of a specific employee
 router.get('/tasks/:userId', async (req, res) => {
-    const { userId } = req.params;
-    const tasks = await Task.find({ assignedTo: userId })
-    res.status(200).json({ message: "All tasks of that employee", tasks });
+    try {
+        const { userId } = req.params;
+        const tasks = await Task.find({ assignedTo: userId });
+        res.status(200).json({ message: "All tasks of that employee", tasks });
+    } catch (error) {
+        res.status(500).json({ error: "Server error" });
+    }
 });
 
-router.get('/taskcount/:userId', async (req, res)=>{
-    const {userId} = req.params;
-    const data = {
-        newTask: 0, activeTask: 0, failedTask: 0, completedTask: 0
-    };
-    const tasks = await Task.find({assignedTo: userId});
-    tasks.forEach((task) => {
-        if (task.status === 'new') data.newTask += 1;
-        if (task.status === 'active') data.activeTask += 1;
-        if (task.status === 'completed') data.completedTask += 1;
-        if (task.status === 'failed') data.failedTask += 1;
-    });
-
-    // Respond with the count
-    res.status(200).json({ message: "Returning count of tasks", data });
-})
+router.get('/taskcount/:userId', async (req, res) => {
+    try {
+        const {userId} = req.params;
+        const data = {
+            newTask: 0, activeTask: 0, failedTask: 0, completedTask: 0
+        };
+        const tasks = await Task.find({assignedTo: userId});
+        tasks.forEach((task) => {
+            if (task.status === 'new') data.newTask += 1;
+            if (task.status === 'active') data.activeTask += 1;
+            if (task.status === 'completed') data.completedTask += 1;
+            if (task.status === 'failed') data.failedTask += 1;
+        });
+        res.status(200).json({ message: "Returning count of tasks", data });
+    } catch (error) {
+        res.status(500).json({ error: "Server error" });
+    }
+});
 
 export default router;

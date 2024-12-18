@@ -24,24 +24,6 @@ const userSchema = new mongoose.Schema({
         enum: ["admin", "employee"],
         default: "employee",
     },
-    taskCounts: {
-        newTask: {
-            type: Number,
-            default: 0,
-        },
-        activeTask: {
-            type: Number,
-            default: 0,
-        },
-        completedTask: {
-            type: Number,
-            default: 0,
-        },
-        failedTask: {
-            type: Number,
-            default: 0,
-        },
-    },
 }, {
     timestamps: true,
 })
